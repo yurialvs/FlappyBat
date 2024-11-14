@@ -1,16 +1,33 @@
+import sys
+import os
 import pygame
 import random
 from constantes import *  # Importa todas as constantes definidas em constantes.py
-from recorde import salvar_recorde  # Importa a função salvar_recorde
+from recorde.recorde import salvar_recorde  # Importa a função salvar_recorde
+
+# Configuração para lidar com caminhos relativos para recursos quando o código é executado como um executável
+def resource_path(relative_path):
+    try:
+        if getattr(sys, 'frozen', False):  # Se o código estiver no executável
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath("."), relative_path)  # Para a versão em código-fonte
+    except Exception as e:
+        print(f"Erro ao acessar recurso: {e}")
+        return relative_path
+    
+bat_img_path = resource_path("imagens/bat.png")
+obstaculo_img_path = resource_path("imagens/obstaculo.png")
+premio_img_path = resource_path("imagens/premio.png")
+paisagem_img_path = resource_path("imagens/paisagem.png")
 
 # Inicializa o Pygame
 pygame.init()
 
 # Carregar imagens
-bat_img = pygame.image.load("imagens/bat.png")
-obstaculo_img = pygame.image.load("imagens/obstaculo.png")
-premio_img = pygame.image.load("imagens/premio.png")
-paisagem_img = pygame.image.load("imagens/paisagem.png")
+bat_img = pygame.image.load(bat_img_path)
+obstaculo_img = pygame.image.load(obstaculo_img_path)
+premio_img = pygame.image.load(premio_img_path)
+paisagem_img = pygame.image.load(paisagem_img_path)
 
 # Criar janela
 tela = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
@@ -115,6 +132,7 @@ def tela_nome_jogador():
                 elif evento.key <= 127:  # Verifica se a tecla pressionada é um caractere
                     nome += evento.unicode
 
+# Função principal para o jogo
 def jogo():
     # Inicializar o relógio e o score
     clock = pygame.time.Clock()
