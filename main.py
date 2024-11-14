@@ -123,10 +123,8 @@ def jogo():
     nome = tela_nome_jogador()
     if nome is None:
         return  # Se o nome for None, o jogador fechou a janela
-
-    # Restante do código do jogo
-
-
+ 
+    # Definições
     bat = pygame.Rect(50, ALTURA_TELA // 2, 47, 30)  # Posição inicial da bat
     obstaculos = []
     premios = []
@@ -244,6 +242,7 @@ def jogo():
         # Atualizar display
         pygame.display.flip()
 
+    # Finaliza o Pygame
     pygame.quit()
 
 # Rodar o jogo
