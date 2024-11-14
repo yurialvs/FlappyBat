@@ -1,23 +1,10 @@
 import pygame
 import random
-import os
+from constantes import *  # Importa todas as constantes definidas em constantes.py
+from recorde import salvar_recorde  # Importa a função salvar_recorde
 
 # Inicializa o Pygame
 pygame.init()
-
-# Definir constantes
-LARGURA_TELA = 400
-ALTURA_TELA = 600
-FPS = 60
-GRAVIDADE = 0.5
-VELOCIDADE_PAINEL = 2
-LIMITE_LINHA = LARGURA_TELA - 50
-ESPACO_MIN_OBSTACULO = 100  # Espaço mínimo entre os obstáculos
-ESPACO_MAX_OBSTACULO = 200  # Espaço máximo entre os obstáculos
-
-# Cores
-PRETO = (0, 0, 0)
-BRANCO = (255, 255, 255)
 
 # Carregar imagens
 bat_img = pygame.image.load("imagens/bat.png")
@@ -71,40 +58,6 @@ def checar_colisao(bat, obstaculos, premios):
 
     return False
 
-# Função para salvar o recorde
-def salvar_recorde(pontuacao, nome):
-    try:
-        if os.path.exists("records.txt"):
-            with open("records.txt", "r") as f:
-                conteudo = f.read().strip()
-                if conteudo:
-                    # Garantir que o formato seja correto (pontuacao:nome)
-                    partes = conteudo.split(":")
-                    if len(partes) == 2:
-                        recorde = int(partes[0])
-                        recorde_nome = partes[1]
-                    else:
-                        # Caso o formato não seja válido, usaremos valores padrão
-                        recorde = 0
-                        recorde_nome = ""
-                else:
-                    recorde = 0
-                    recorde_nome = ""
-        else:
-            recorde = 0
-            recorde_nome = ""
-    except FileNotFoundError:
-        # Caso o arquivo não exista, cria-se um novo com valores padrão
-        recorde = 0
-        recorde_nome = ""
-
-    # Se a pontuação do jogador for maior que o recorde, atualiza o recorde
-    if pontuacao > recorde:
-        with open("records.txt", "w") as f:
-            f.write(f"{pontuacao}:{nome}")  # Salva a pontuação e o nome
-        return pontuacao, nome  # Retorna a nova pontuação e nome
-    return recorde, recorde_nome  # Retorna o recorde atual e o nome associado
-
 # Função para desenhar a tela inicial
 def tela_inicial():
     fonte = pygame.font.Font(None, 48)
@@ -135,12 +88,21 @@ def tela_game_over(pontuacao, recorde, nome):
 def tela_nome_jogador():
     nome = ""
     fonte = pygame.font.Font(None, 36)
+    fonte_instrucoes = pygame.font.Font(None, 24)  # Fonte menor para as instruções
     while True:
         tela.fill(PRETO)
+
+        # Renderiza o nome do jogador
         nome_texto = fonte.render(f"Digite seu nome: {nome}", True, BRANCO)
         tela.blit(nome_texto, (LARGURA_TELA // 2 - nome_texto.get_width() // 2, ALTURA_TELA // 2))
+
+        # Renderiza a instrução "Pressione Enter para confirmar"
+        instrucoes_texto = fonte_instrucoes.render("Pressione Enter para confirmar", True, BRANCO)
+        tela.blit(instrucoes_texto, (LARGURA_TELA // 2 - instrucoes_texto.get_width() // 2, ALTURA_TELA // 2 + 40))  # 40 pixels abaixo
+
         pygame.display.flip()
 
+        # Eventos de teclado
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
@@ -153,7 +115,6 @@ def tela_nome_jogador():
                 elif evento.key <= 127:  # Verifica se a tecla pressionada é um caractere
                     nome += evento.unicode
 
-# Função principal do jogo
 def jogo():
     # Inicializar o relógio e o score
     clock = pygame.time.Clock()
@@ -162,6 +123,9 @@ def jogo():
     nome = tela_nome_jogador()
     if nome is None:
         return  # Se o nome for None, o jogador fechou a janela
+
+    # Restante do código do jogo
+
 
     bat = pygame.Rect(50, ALTURA_TELA // 2, 47, 30)  # Posição inicial da bat
     obstaculos = []
