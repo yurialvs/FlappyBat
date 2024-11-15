@@ -2,8 +2,29 @@ import sys
 import os
 import pygame
 import random
-from constantes import *  # Importa todas as constantes definidas em constantes.py
 from recorde.recorde import salvar_recorde  # Importa a função salvar_recorde
+
+# Definições de constantes
+
+# Dimensões da tela
+LARGURA_TELA = 400
+ALTURA_TELA = 600
+
+# FPS
+FPS = 65
+
+# Gravidade e velocidade
+GRAVIDADE = 0.7
+VELOCIDADE_PAINEL = 2
+
+# Limite da linha do painel e intervalo dos obstáculos
+LIMITE_LINHA = LARGURA_TELA - 50
+ESPACO_MIN_OBSTACULO = 100  # Espaço mínimo entre os obstáculos
+ESPACO_MAX_OBSTACULO = 200  # Espaço máximo entre os obstáculos
+
+# Cores
+PRETO = (0, 0, 0)
+BRANCO = (255, 255, 255)
 
 # Configuração para lidar com caminhos relativos para recursos quando o código é executado como um executável
 def resource_path(relative_path):
@@ -266,6 +287,3 @@ def jogo():
 # Rodar o jogo
 if __name__ == "__main__":
     jogo()
-
-
-    # Teste
