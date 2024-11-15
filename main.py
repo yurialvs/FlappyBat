@@ -266,3 +266,6 @@ def jogo():
 # Rodar o jogo
 if __name__ == "__main__":
     jogo()
+
+
+    # Teste
